@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Nervous Breakdown Game</title>
+<style>
+body {
+font-family: sans-serif;
+text-align: center;
+margin-top: 20px;
+background-color: #080;
+}
+#game-board {
+width: 300px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(4, 60px);
+gap: 10px;
+}
+.card {
+width: 60px;
+height: 60px;
+font-size: 24px;
+border: 1px solid #333;
+cursor: pointer;
+background-color: #e0e0e0;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.flipped {
+background-color: #fff;
+}
+.matched {
+background-color: #f36;
+color: #fff;
+}
+p {
+color: #00f;
+}
+</style>
+</head>
+<body>
+<h1>Nervous Breakdown Game</h1>
+<div id="game-board"></div>
+<p id="message"></p>
+<script>
+(function(){
+var symbols = ['0', '0', '1', '1', '2', '2', '3', '3', '4', '4', '5', '5', '6', '6', '7', '7', '8', '8', '9', '9'];
+function shuffleArray(array) {
+for(var i = array.length - 1; i > 0; i--) {
+var j = Math.floor(Math.random() * (i + 1));
+var temp = array[i];
+array[i] = array[j];
+array[j] = temp;
+}
+return array;
+}
+var shuffled = shuffleArray(symbols.slice());
+var board = document.getElementById('game-board');
+var message = document.getElementById('message');
+var firstCard = null;
+var secondCard = null;
+var lock = false;
+var matchedCount = 0;
+for(var i = 0; i < shuffled.length; i++) {
+var card = document.createElement('div');
+card.className = 'card';
+card.setAttribute('data-symbol', shuffled[i]);
+card.onclick = handleClick;
+board.appendChild(card);
+}
+function handleClick() {
+if(lock || this.className.indexOf('flipped') !== -1 || this.className.indexOf('matched') !== -1) return;
+this.innerHTML = this.getAttribute('data-symbol');
+this.className += ' flipped';
+if(!firstCard) {
+firstCard = this;
+} else {
+secondCard = this;
+lock = true;
+setTimeout(checkMatch, 1000);
+}
+}
+function checkMatch(){
+if(firstCard.getAttribute('data-symbol') === secondCard.getAttribute('data-symbol')) {
+firstCard.className = 'card matched';
+secondCard.className = 'card matched';
+matchedCount += 2;
+if(matchedCount === symbols.length) {
+window.alert('Game Clear!');
+}
+} else {
+firstCard.innerHTML = '';
+secondCard.innerHTML = '';
+firstCard.className = 'card';
+secondCard.className = 'card';
+}
+firstCard = null;
+secondCard = null;
+lock = false;
+}
+})();
+</script>
+</body>
+</html>
