@@ -10,5 +10,7 @@
 ## Caution
 * No time limit, then you click "x" button which is top right side of the window if you want to end.
 
-16th, Jul, 2025
+
+on 16th, Jul, 2025
+
 Hirotoshi Uchida
